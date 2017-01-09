@@ -2,9 +2,11 @@ package com.qtking.weather.util;
 
 import android.text.TextUtils;
 
+import com.google.gson.Gson;
 import com.qtking.weather.db.City;
 import com.qtking.weather.db.County;
 import com.qtking.weather.db.Province;
+import com.qtking.weather.gson.Weather;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -94,5 +96,19 @@ public class Utility {
             }
         }
         return false;
+    }
+
+    public static Weather handleWeatherResponse(String response) {
+        try {
+            JSONObject jsonObject = new JSONObject(response);
+            JSONArray jsonArray = jsonObject.getJSONArray("HeWeather");
+            String weatherContent = jsonArray.getJSONObject(0).toString();
+            return new Gson().fromJson(weatherContent, Weather.class);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+
+        return null;
     }
 }
